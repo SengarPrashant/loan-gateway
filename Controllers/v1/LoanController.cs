@@ -1,4 +1,6 @@
-﻿using LoanGeteway.Models;
+﻿using LoanGeteway.Common;
+using LoanGeteway.Models;
+using LoanGeteway.Services;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -8,8 +10,12 @@ namespace LoanGeteway.Controllers.v1
     [ApiController]
     public class LoanController : ControllerBase
     {
+        private readonly ILoanService _loanService;
+        public LoanController(ILoanService loanService) {
+        _loanService = loanService;
+        }
         
-        [HttpGet]
+        [HttpGet("products")]
         [ProducesResponseType(typeof(ApiResponse<List<Product>, string>), 200)]
         [ProducesResponseType(typeof(ApiResponse<string, List<ErrorDetail>>), 400)]
         [ProducesResponseType(typeof(ApiResponse<string, List<ErrorDetail>>), 500)]
@@ -17,18 +23,15 @@ namespace LoanGeteway.Controllers.v1
         {
             try
             {
-                var products = new List<Product> {
-                    new Product{Code="auto",Type="AUTO Loan", Description="Applicable for automobile loan" }
-                    };
-                
+                var products = _loanService.GetProductsList();
 
-                return Ok(ApiResponse<List<Product>, string>.SuccessObject(products, "Products retrieved successfully"));
+                return Ok(ApiResponse<List<Product>, string>.SuccessObject(products, Message.Success));
             }
             catch (Exception ex)
             {
                 var error = new List<ErrorDetail>
                     {
-                        new ErrorDetail { ErrorCode = "500", Message = "test error" }
+                        new ErrorDetail { ErrorCode = "500", Message =Message.UnknownError }
                     };
                 return StatusCode(500,ApiResponse<string, List<ErrorDetail>>.ErrorObject(error));
             }
@@ -40,25 +43,22 @@ namespace LoanGeteway.Controllers.v1
         [ProducesResponseType(typeof(ApiResponse<EligibilityCheckResponse, string>), 200)]
         [ProducesResponseType(typeof(ApiResponse<string, List<ErrorDetail>>), 400)]
         [ProducesResponseType(typeof(ApiResponse<string, List<ErrorDetail>>), 500)]
-        public async Task<IActionResult> Get([FromBody] EligibilityCheck data)
+        public async Task<IActionResult> Eligibility(string productCode, [FromBody] EligibilityCheck request)
         {
-
             try
             {
-                var respData = new EligibilityCheckResponse
-                {
-                    Status = "PartialEligible",
-                    Remarks = "Eligibility partially confirmed. Further verification required.",
-                    Amount = 1000000
-                };
+                var reqId = Guid.NewGuid();
+                request.RequestId = reqId;
 
-                return Ok(ApiResponse<EligibilityCheckResponse, string>.SuccessObject(respData, "Products retrieved successfully"));
+                var result = _loanService.EligibilityCheck(productCode,request);
+
+                return Ok(ApiResponse<EligibilityCheckResponse, string>.SuccessObject(result, Message.Success));
             }
             catch (Exception ex)
             {
                 var error = new List<ErrorDetail>
                 {
-                   new ErrorDetail { ErrorCode = "500", Message = "test error" }
+                   new ErrorDetail { ErrorCode = "500", Message = Message.UnknownError }
                 };
                 return StatusCode(500, ApiResponse<string, List<ErrorDetail>>.ErrorObject(error));
             }
@@ -69,25 +69,19 @@ namespace LoanGeteway.Controllers.v1
         [ProducesResponseType(typeof(ApiResponse<LoanApplicationResponse, string>), 200)]
         [ProducesResponseType(typeof(ApiResponse<string, List<ErrorDetail>>), 400)]
         [ProducesResponseType(typeof(ApiResponse<string, List<ErrorDetail>>), 500)]
-        public async Task<IActionResult> Post([FromForm] LoanApplication data)
+        public async Task<IActionResult> Apply(string productCode, [FromForm] LoanApplication request)
         {
             try
             {
-                var respData = new LoanApplicationResponse
-                {
-                    Status = "SUBMITTED",
-                    Remarks = "You loan application has been submitted.",
-                    Arn = "ARNL0011",
-                    UserId="USERSSN"
-                };
+                var result = _loanService.SubmitApplication(productCode, request);
 
-                return Ok(ApiResponse<LoanApplicationResponse, string>.SuccessObject(respData, ""));
+                return Ok(ApiResponse<LoanApplicationResponse, string>.SuccessObject(result, Message.Success));
             }
             catch (Exception ex)
             {
                 var error = new List<ErrorDetail>
                 {
-                   new ErrorDetail { ErrorCode = "500", Message = "test error" }
+                   new ErrorDetail { ErrorCode = "500", Message = Message.UnknownError }
                 };
                 return StatusCode(500, ApiResponse<string, List<ErrorDetail>>.ErrorObject(error));
             }
@@ -97,37 +91,44 @@ namespace LoanGeteway.Controllers.v1
         [ProducesResponseType(typeof(ApiResponse<LoanStatusResponse, string>), 200)]
         [ProducesResponseType(typeof(ApiResponse<string, List<ErrorDetail>>), 400)]
         [ProducesResponseType(typeof(ApiResponse<string, List<ErrorDetail>>), 500)]
-        public async Task<IActionResult> Put(string userid, string arn)
+        public async Task<IActionResult> Status(string userid, string arn)
         {
             try
             {
-                var respData = new LoanStatusResponse
-                {
-                    Status = "INREVIEW",
-                    Remarks = "You loan application is in review process.",
-                    Arn = "ARNL0011",
-                    UserId = "USERSSN",
-                    PendingSteps = new List<string> { },
-                    CompletedSteps = new List<string> { },
+                var result = _loanService.GetStatus(userid, arn);
 
-                };
-
-                return Ok(ApiResponse<LoanStatusResponse, string>.SuccessObject(respData, ""));
+                return Ok(ApiResponse<LoanStatusResponse, string>.SuccessObject(result, Message.Success));
             }
             catch (Exception ex)
             {
                 var error = new List<ErrorDetail>
                 {
-                   new ErrorDetail { ErrorCode = "500", Message = "test error" }
+                   new ErrorDetail { ErrorCode = "500", Message = Message.UnknownError }
                 };
                 return StatusCode(500, ApiResponse<string, List<ErrorDetail>>.ErrorObject(error));
             }
         }
 
-        //// DELETE api/<LoanController>/5
-        //[HttpDelete("{id}")]
-        //public void Delete(int id)
-        //{
-        //}
+        [HttpGet("{userid}/history")]
+        [ProducesResponseType(typeof(ApiResponse<LoanStatusResponse, string>), 200)]
+        [ProducesResponseType(typeof(ApiResponse<string, List<ErrorDetail>>), 400)]
+        [ProducesResponseType(typeof(ApiResponse<string, List<ErrorDetail>>), 500)]
+        public async Task<IActionResult> History(string userid)
+        {
+            try
+            {
+                var result = _loanService.GetHistory(userid);
+
+                return Ok(ApiResponse<UserRequestHistory, string>.SuccessObject(result, Message.Success));
+            }
+            catch (Exception ex)
+            {
+                var error = new List<ErrorDetail>
+                {
+                   new ErrorDetail { ErrorCode = "500", Message = Message.UnknownError }
+                };
+                return StatusCode(500, ApiResponse<string, List<ErrorDetail>>.ErrorObject(error));
+            }
+        }
     }
 }
