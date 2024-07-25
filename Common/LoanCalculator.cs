@@ -43,11 +43,11 @@ namespace LoanGeteway.Common
             switch (loanType.ToUpper())
             {
                 case "P0001":
-                    return 4.5;
+                    return 6.5;
                 case "A0001":
-                    return 2.5;
+                    return 3.5;
                 case "H0001":
-                    return 1.5;
+                    return 2.5;
                 case "S0001":
                     return -0.5;
                 default:
