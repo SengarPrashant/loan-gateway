@@ -17,6 +17,8 @@
         // thi is backend use start
         public double? InterestRate { get; set; } =0;
         public double? Emi { get; set; } = 0;
+        public string? Status { get; set; }
+        public string? Remarks { get; set; }
         // thi is backend use end
     }
     public class EligibilityCheckResponse
