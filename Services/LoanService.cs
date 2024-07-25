@@ -7,6 +7,7 @@ namespace LoanGeteway.Services
     {
         public List<Product> GetProductsList()
         {
+            // this hardcoded for demo perpose. This will stored into database
             var products = new List<Product> {
                      new Product{Code="A0001",Type="AUTO Loan", Description="Applicable for automobile loan" },
                      new Product{Code="H0001",Type="Home Loan", Description="Applicable for home loan" },
