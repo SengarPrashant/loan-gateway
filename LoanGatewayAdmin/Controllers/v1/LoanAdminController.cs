@@ -39,5 +39,7 @@ namespace LoanGatewayAdmin.Controllers.v1
 				return StatusCode(500, ApiResponse<string, List<ErrorDetail>>.ErrorObject(error));
 			}
 		}
+
+
 	}
 }
