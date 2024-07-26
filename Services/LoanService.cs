@@ -1,7 +1,8 @@
-﻿using LoanGeteway.Common;
-using LoanGeteway.Models;
+﻿using LoanGateway.Common;
+using LoanGateway.Models;
+using LoanGatewayShared.Models;
 
-namespace LoanGeteway.Services
+namespace LoanGateway.Services
 {
     public class LoanService : ILoanService
     {

@@ -1,6 +1,6 @@
-﻿namespace LoanGeteway.Models
+﻿namespace LoanGatewayShared.Models
 {
-    public class ApiResponse<TData, TMessage>
+	public class ApiResponse<TData, TMessage>
     {
         public bool Success { get; set; }
         public TData Data { get; set; }
@@ -14,13 +14,5 @@
         {
             return new ApiResponse<TData, TMessage> { Success = false, Data = default, Message = message };
         }
-    }
-
-    public class ErrorDetail
-    {
-        public string Message { get; set; }
-        public string ErrorCode { get; set; }
-    }
-  
-
+    } 
 }

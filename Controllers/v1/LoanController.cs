@@ -1,6 +1,7 @@
-﻿using LoanGeteway.Common;
-using LoanGeteway.Models;
-using LoanGeteway.Services;
+﻿using LoanGateway.Common;
+using LoanGateway.Models;
+using LoanGatewayShared.Models;
+using LoanGateway.Services;
 using Microsoft.AspNetCore.Mvc;
 
 

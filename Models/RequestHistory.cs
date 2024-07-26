@@ -1,4 +1,6 @@
-﻿namespace LoanGeteway.Models
+﻿using LoanGatewayShared.Models;
+
+namespace LoanGateway.Models
 {
     public class UserRequestHistory
     {

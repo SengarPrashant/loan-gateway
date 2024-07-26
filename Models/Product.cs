@@ -1,4 +1,4 @@
-﻿namespace LoanGeteway.Models
+﻿namespace LoanGateway.Models
 {
     public class Product
     {

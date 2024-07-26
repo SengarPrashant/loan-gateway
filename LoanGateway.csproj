@@ -7,7 +7,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="LoanGatewayAdmin\**" />
+    <Compile Remove="LoanGatewayShared\**" />
+    <Content Remove="LoanGatewayAdmin\**" />
+    <Content Remove="LoanGatewayShared\**" />
+    <EmbeddedResource Remove="LoanGatewayAdmin\**" />
+    <EmbeddedResource Remove="LoanGatewayShared\**" />
+    <None Remove="LoanGatewayAdmin\**" />
+    <None Remove="LoanGatewayShared\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="LoanGatewayShared\LoanGatewayShared.csproj" />
   </ItemGroup>
 
 </Project>

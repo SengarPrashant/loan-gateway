@@ -1,6 +1,7 @@
-﻿using LoanGeteway.Models;
+﻿using LoanGateway.Models;
+using LoanGatewayShared.Models;
 
-namespace LoanGeteway.Services
+namespace LoanGateway.Services
 {
     public interface ILoanService
     {

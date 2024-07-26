@@ -1,8 +1,8 @@
-﻿using LoanGeteway.Models;
+﻿using LoanGateway.Models;
 
-namespace LoanGeteway.Common
+namespace LoanGateway.Common
 {
-    public class LoanCalculator
+	public class LoanCalculator
     {
         public static (double interestRate, double emi) CalculateInterestRateAndEMI(string loanType, EligibilityCheck eligibility)
         {
