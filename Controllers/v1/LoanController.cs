@@ -1,13 +1,12 @@
-﻿using LoanGateway.Common;
-using LoanGateway.Models;
-using LoanGatewayShared.Models;
+﻿using LoanGateway.Models;
 using LoanGateway.Services;
+using LoanGatewayShared.Models;
 using Microsoft.AspNetCore.Mvc;
 
 
 namespace LoanGeteway.Controllers.v1
 {
-    [Route("api/v1/[controller]")]
+	[Route("api/v1/[controller]")]
     [ApiController]
     public class LoanController : ControllerBase
     {

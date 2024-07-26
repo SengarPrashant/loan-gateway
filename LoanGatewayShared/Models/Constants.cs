@@ -1,4 +1,4 @@
-﻿namespace LoanGateway.Common
+﻿namespace LoanGatewayShared.Models
 {
 	public class Message
     {

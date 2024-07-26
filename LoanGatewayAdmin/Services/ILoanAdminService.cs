@@ -1,8 +1,13 @@
-﻿namespace LoanGatewayAdmin.Services
+﻿using LoanGatewayShared.Models;
+
+namespace LoanGatewayAdmin.Services
 {
-	public class ILoanAdminService
+	public interface ILoanAdminService
 	{
 
+		Task<List<LoanApplication>> GetLoanApplicationsAsync();
+
+		void UpdateStatus(string arn, string status, double amount);
 
 	}
 }
